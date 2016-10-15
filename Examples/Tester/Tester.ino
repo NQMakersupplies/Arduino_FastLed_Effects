@@ -19,22 +19,25 @@ FASTLED_USING_NAMESPACE
 #define DATA_PIN  5
 #define CLOCK_PIN 4
 #define LED_TYPE    APA102
-#define COLOR_ORDER GBR
+#define COLOR_ORDER BGR
 #define NUM_LEDS    64
 CRGB leds[NUM_LEDS];
 
-CRGB myLeds[NUM_LEDS];
+//CRGB myLeds[NUM_LEDS];
+
+//CRGB tempLeds1[NUM_LEDS];
+//CRGB tempLeds2[NUM_LEDS];
 
 FastLed_Effects ledEffects(NUM_LEDS);
 
-#define BRIGHTNESS          50
+#define BRIGHTNESS          400
 #define FRAMES_PER_SECOND  120
 
 void setup() {
   delay(3000); // 3 second delay for recovery
   
   // tell FastLED about the LED strip configuration
-  FastLED.addLeds<LED_TYPE,DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds<LED_TYPE,DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(0x80B0FF);
   //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
   // set master brightness control
@@ -44,7 +47,7 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { rainbow, rainbowWithGlitter, confetti, sinelon, juggle, bpm };
+SimplePatternList gPatterns = { dotFade};
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
@@ -61,6 +64,7 @@ void loop()
 
   // do some periodic updates
   EVERY_N_MILLISECONDS( 20 ) { gHue++; ledEffects.setHue(gHue);} // slowly cycle the "base color" through the rainbow
+  
   EVERY_N_SECONDS( 10 ) { nextPattern(); } // change patterns periodically
 }
 
@@ -102,5 +106,10 @@ void bpm()
 void juggle() 
 {
   ledEffects.juggle(leds);
+}
+
+void dotFade() 
+{
+  ledEffects.dotFadeColourWithRainbowSparkle(leds, gHue/4, CRGB::White);
 }
 

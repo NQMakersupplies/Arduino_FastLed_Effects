@@ -9,7 +9,8 @@
 #include "FastLed_Effects.h"
 
 
-
+CRGB tempLeds1[1024];
+CRGB tempLeds2[1024];
 
 FastLed_Effects::FastLed_Effects(int num_Leds)
 {
@@ -92,6 +93,78 @@ void FastLed_Effects::juggle(CRGB leds[])
     leds[beatsin16(i+7,0,_numLeds)] |= CHSV(dothue, 200, 255);
     dothue += 32;
   }
+}
+
+void FastLed_Effects::dotFade(CRGB leds[])
+{
+  dotFade(leds, _hue/4);
+}
+
+void FastLed_Effects::dotFade(CRGB leds[], uint16_t ledPosition)
+{
+  dotFadeHue(leds, _hue/4, _hue);
+}
+
+void FastLed_Effects::dotFadeHue(CRGB leds[], uint16_t ledPosition, uint8_t hue)
+{
+  // a colored dot sweeping back and forth, with fading trails
+  fadeToBlackBy( leds, _numLeds, 20);
+  leds[ledPosition] += CHSV( _hue, 255, 192);
+}
+
+void FastLed_Effects::dotFadeColour(CRGB leds[], uint16_t ledPosition, CRGB colour)
+{
+  // a colored dot sweeping back and forth, with fading trails
+  fadeToBlackBy( leds, _numLeds, 20);
+  leds[ledPosition] += colour;
+}
+
+void FastLed_Effects::dotFadeColourWithSparkle(CRGB leds[], uint16_t ledPosition, CRGB colour)
+{
+  int chanceOfGlitter = 5, i;
+  
+  // a colored dot sweeping back and forth, with fading trails
+  fadeToBlackBy( tempLeds1, _numLeds, 20);
+  tempLeds1[ledPosition] += colour;
+
+
+  fadeToBlackBy( tempLeds2, _numLeds, 5);
+  
+
+  if( random8() < chanceOfGlitter) {
+    tempLeds2[ ledPosition ] += CRGB::Green;
+  }
+  
+
+  for(i = 0; i < _numLeds; i++)
+  {
+    leds[i] = tempLeds1[i] + tempLeds2[i];
+  }
+  
+}
+
+void FastLed_Effects::dotFadeColourWithRainbowSparkle(CRGB leds[], uint16_t ledPosition, CRGB colour)
+{
+  int chanceOfGlitter = 5, i;
+  
+  // a colored dot sweeping back and forth, with fading trails
+  fadeToBlackBy( tempLeds1, _numLeds, 20);
+  tempLeds1[ledPosition] += colour;
+
+
+  fadeToBlackBy( tempLeds2, _numLeds, 5);
+  
+
+  if( random8() < chanceOfGlitter) {
+    tempLeds2[ ledPosition ] += CHSV( _hue, 255, 192);
+  }
+  
+
+  for(i = 0; i < _numLeds; i++)
+  {
+    leds[i] = tempLeds1[i] + tempLeds2[i];
+  }
+  
 }
 
 

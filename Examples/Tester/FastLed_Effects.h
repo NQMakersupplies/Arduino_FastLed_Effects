@@ -34,6 +34,15 @@ class FastLed_Effects
 
     void juggle(CRGB leds[]);
 
+    void dotFade(CRGB leds[]);
+    void dotFade(CRGB leds[], uint16_t ledPosition); 
+    void dotFadeHue(CRGB leds[], uint16_t ledPosition, uint8_t hue );
+    void dotFadeColour(CRGB leds[], uint16_t ledPosition, CRGB colour );
+
+    void dotFadeColourWithSparkle(CRGB leds[], uint16_t ledPosition, CRGB colour );
+
+    void dotFadeColourWithRainbowSparkle(CRGB leds[], uint16_t ledPosition, CRGB colour );
+
   private:
     int _numLeds;
     uint8_t _hue;
