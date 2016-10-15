@@ -6,57 +6,45 @@ Mission:
 To create a library of effects for use with fast led.
 
 
-Interface Description for Effects that create:
+Interface Description for Effects:
 ==============================================
 
 constructor:
 ------------
 As a minumum to keep maximum portability each effect will be able to use the following constructor:
 
-Effect effect(Num_Leds);
+FastLed_Effects effects(Num_Leds);
 
 
 Methods:
 --------
 
-effect.getLeds()
-Return a CRGB array of size Num-Leds, if required use default parameters if the effect needs some more information.
-It is also suggested to use overloading to keep this method as the only one required for returning led array state.
 
-effect.getNumLeds()
-Returns _Num_Leds
+effects.getNumLeds()
+Returns _numLeds
 
-effect.setNumLeds(int Num_Leds)
-used to set internal _Num_Leds
+effects.setNumLeds(int Num_Leds)
+used to set internal _numLeds
 
-effect.setGlobalHue(uint8_t gHue)
-used to set internal _globalHue
+effects.setGlobalHue(uint8_t hue)
+used to set internal _hue
 
 
 
-Interface Description for Effects that modify and existing CRGB array:
-==============================================
-
-constructor:
-------------
-As a minumum to keep maximum portability each effect will be able to use the following constructor:
-
-Effect effect(Num_Leds);
+Effect Methods:
+---------------
 
 
-Methods:
---------
+    void fillRainbow(CRGB leds[]);
 
-effect.getLeds(CRGB[] ledsToModify)
-Return a CRGB array of size Num-Leds, if required use default parameters if the effect needs some more information.
-It is also suggested to use overloading to keep this method as the only one required for returning led array state.
+    void addGlitter(CRGB leds[]);
+    void addGlitter(CRGB leds[], fract8 chanceOfGlitter);
+    
+    void confetti(CRGB leds[]); 
 
-effect.getNumLeds()
-Returns _Num_Leds
+    void sinelon(CRGB leds[]); 
 
-effect.setNumLeds(int Num_Leds)
-used to set internal _Num_Leds
+    void bpm(CRGB leds[]);
+    void bpm(CRGB leds[], uint8_t beatsPerMinute);
 
-effect.setGlobalHue(uint8_t gHue)
-used to set internal _globalHue
-
+    void juggle(CRGB leds[]);
