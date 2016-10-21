@@ -18,7 +18,10 @@ class FastLed_Effects
     
     int getNumLeds();
     void setNumLeds(int num_Leds);
-    void setHue(uint8_t hue);
+    void setHue(uint8_t _hue);
+    void setSlowSpeed(uint8_t _slowSpeed);
+    void setMedSpeed(uint8_t _medSpeed);
+    void setFastSpeed(uint8_t _fastSpeed);
 
     void fillRainbow(CRGB leds[]);
 
@@ -43,9 +46,16 @@ class FastLed_Effects
 
     void dotFadeColourWithRainbowSparkle(CRGB leds[], uint16_t ledPosition, CRGB colour );
 
+    void EvenSidedGeoDotFadeColourWithRainbowSparkle(CRGB leds[], uint16_t ledPosition, CRGB colour, int sides );
+
+    void EvenSidedGeoDotFadeBounceColourWithRainbowSparkle(CRGB leds[], uint16_t ledPosition, CRGB colour, int sides );
+
   private:
     int _numLeds;
     uint8_t _hue;
+    uint8_t _slowSpeed;
+    uint8_t _medSpeed;
+    uint8_t _fastSpeed;
 };
 
 #endif

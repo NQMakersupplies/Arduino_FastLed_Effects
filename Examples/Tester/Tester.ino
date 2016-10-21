@@ -16,12 +16,15 @@ FASTLED_USING_NAMESPACE
 #warning "Requires FastLED 3.1 or later; check github for latest code."
 #endif
 
+#define FASTLED_ALLOW_INTERRUPTS 0 
 #define DATA_PIN  5
 #define CLOCK_PIN 4
 #define LED_TYPE    APA102
 #define COLOR_ORDER BGR
 #define NUM_LEDS    390//Leds fourth corner 312//leds third corner 234 + 235 //leds second corner = 156 and 157// led first corner =78 and 79 //total = 390
 CRGB leds[NUM_LEDS];
+
+#define NUM_SIDES 5
 
 //CRGB myLeds[NUM_LEDS];
 
@@ -47,10 +50,13 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { dotFade};
+SimplePatternList gPatterns = { GeoDotFadeEndBounceRotate2};
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
-uint8_t gHue = 0; // rotating "base color" used by many of the patterns
+int gHue = 0; // rotating "base color" used by many of the patterns
+uint8_t slowSpeed = 0;
+uint8_t medSpeed = 0;
+uint8_t fastSpeed = 0;
   
 void loop()
 {
@@ -64,6 +70,9 @@ void loop()
 
   // do some periodic updates
   EVERY_N_MILLISECONDS( 20 ) { gHue++; ledEffects.setHue(gHue);} // slowly cycle the "base color" through the rainbow
+  EVERY_N_MILLISECONDS( 20 ) {slowSpeed++; /*ledEffects.setSlowSpeed(slowSpeed);*/} 
+  EVERY_N_MILLISECONDS( 7 ) {medSpeed++; /*ledEffects.setMedSpeed(medSpeed);*/} 
+  EVERY_N_MILLISECONDS( 1 ) {fastSpeed++; /*ledEffects.setFastSpeed(fastSpeed);*/} 
   
   EVERY_N_SECONDS( 10 ) { nextPattern(); } // change patterns periodically
 }
@@ -110,6 +119,86 @@ void juggle()
 
 void dotFade() 
 {
-  ledEffects.dotFadeColourWithRainbowSparkle(leds, gHue/4, CRGB::White);
+  uint16_t dotPosition = map(gHue,0,254,0,NUM_LEDS - 1);
+  ledEffects.dotFadeColourWithRainbowSparkle(leds, dotPosition, CRGB::White);
 }
+
+void GeoDotFade() 
+{
+  uint16_t dotPosition = map(fastSpeed,0,254,0,NUM_LEDS - 1);
+  
+  ledEffects.EvenSidedGeoDotFadeBounceColourWithRainbowSparkle(leds, dotPosition, CRGB::White, NUM_SIDES);
+}
+
+void GeoDotFadeTimes2() 
+{
+  uint16_t dotPosition = map(fastSpeed,0,254,0,NUM_LEDS - 1);
+  
+  ledEffects.EvenSidedGeoDotFadeBounceColourWithRainbowSparkle(leds, dotPosition, CRGB::White, NUM_SIDES * 2);
+}
+
+void GeoDotFadeTimes4() 
+{
+  uint16_t dotPosition = map(fastSpeed,0,254,0,NUM_LEDS - 1);
+  
+  ledEffects.EvenSidedGeoDotFadeBounceColourWithRainbowSparkle(leds, dotPosition, CRGB::White, NUM_SIDES * 4);
+}
+
+void GeoDotFadeEndBounce() 
+{
+  uint16_t dotPosition = map(fastSpeed,0,254,0,NUM_LEDS - 1);
+  
+  ledEffects.EvenSidedGeoDotFadeBounceColourWithRainbowSparkle(leds, dotPosition, CRGB::White, 1);
+}
+
+void GeoDotFadeEndBounceRotate() 
+{
+  uint16_t dotPosition = map(fastSpeed,0,254,0,NUM_LEDS - 1);
+
+  uint16_t rotate = map(slowSpeed,0,254,0,NUM_LEDS - 1);
+  
+  ledEffects.EvenSidedGeoDotFadeBounceColourWithRainbowSparkle(leds, dotPosition, CRGB::White, NUM_SIDES * 4);
+
+  leftRotate(leds, rotate, NUM_LEDS);
+  
+}
+
+void GeoDotFadeEndBounceRotate2() 
+{
+  uint16_t dotPosition = map(fastSpeed,0,254,0,NUM_LEDS - 1);
+
+  uint16_t rotate = map(slowSpeed,0,254,0,NUM_LEDS - 1);
+  
+  ledEffects.EvenSidedGeoDotFadeBounceColourWithRainbowSparkle(leds, dotPosition, CRGB::White, NUM_SIDES * 4);
+
+  leftRotate(leds, rotate, NUM_LEDS);
+  
+}
+
+void pointer_shift(CRGB *a, int n) {
+   int i;
+   for (i = 0; i != n - 1; i++) {
+      *(a+i) = *(a+i+1);
+   }
+}
+
+/*Function to left rotate arr[] of size n by d*/
+void leftRotate(CRGB arr[], uint16_t d, uint16_t n)
+{
+  uint16_t i;
+  for (i = 0; i < d; i++)
+    leftRotatebyOne(arr, n);
+}
+ 
+void leftRotatebyOne(CRGB arr[], uint16_t n)
+{
+  CRGB temp;
+  uint16_t i;
+  temp = arr[0];
+  for (i = 0; i < n-1; i++)
+     arr[i] = arr[i+1];
+  arr[i] = temp;
+}
+
+
 
