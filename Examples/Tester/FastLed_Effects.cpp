@@ -1,6 +1,6 @@
 /*
-  FastLed_Effects.cpp - Library for flashing FastLed_Effects code.
-  Created by David A. Mellis, November 2, 2007.
+  FastLed_Effects.h - Library for effects to use with FastLed.
+  Created by Kurt Schoenhoff Kurt@nqmakersupplies.com.au 2016.
   Released into the public domain.
 */
 

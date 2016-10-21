@@ -20,7 +20,7 @@ FASTLED_USING_NAMESPACE
 #define CLOCK_PIN 4
 #define LED_TYPE    APA102
 #define COLOR_ORDER BGR
-#define NUM_LEDS    64
+#define NUM_LEDS    312//leds third corner 234 + 235 //leds second corner = 156 and 157// led first corner =78 and 79 //total = 390
 CRGB leds[NUM_LEDS];
 
 //CRGB myLeds[NUM_LEDS];
@@ -47,7 +47,7 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { dotFade};
+SimplePatternList gPatterns = { rainbow};
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
